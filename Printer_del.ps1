@@ -28,15 +28,18 @@ function Test-Administrator
 }
 
 if (-not (Test-Administrator))
-{
+{	
+	$CommandLine = "-File `"" + $MyInvocation.MyCommand.Path + "`" " + $MyInvocation.UnboundArguments
     if ( Test-Path "$psHome\pwsh.exe")
         {
         Write-Host "pwsh présent"
-        Start-Process "$psHome\pwsh.exe" -Verb Runas -ArgumentList '-command ".\printer_del.ps1"'
+		Start-Process -FilePath "$psHome\pwsh.exe" -Verb Runas -ArgumentList $CommandLine
+		Exit
         }
     else
     {
-        Start-Process "$psHome\powershell.exe" -Verb Runas -ArgumentList '-command ".\printer_del.ps1"'
+        Start-Process "$psHome\powershell.exe" -Verb Runas -ArgumentList $CommandLine
+		Exit
     }
 }
 
